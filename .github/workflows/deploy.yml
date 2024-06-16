@@ -30,3 +30,4 @@ jobs:
             git pull origin prod
             docker-compose down
             docker-compose up -d --build
+          debug: true
