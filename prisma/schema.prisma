@@ -1,0 +1,64 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Создаем модель пользователя
+model User {
+  id        Int     @id @default(autoincrement())
+  email     String  @unique
+  name      String
+  bdate     String  
+  image     String
+  role      Role    @default(PENDING)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Многие ко многим связи между пользователями и списками желаний
+  wishlists Wishlist[]
+}
+
+// Создаем модель списка желаний
+model Wishlist {
+  id        Int       @id @default(autoincrement())
+  userId    Int       
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  // Связь многие ко многим между списками желаний и элементами
+  items     WishlistItem[]
+
+  // Один ко многим связь между списком желаний и пользователем
+  user      User      @relation(fields: [userId], references: [id])
+}
+
+// Создаем модель элемента списка желаний
+model WishlistItem {
+  id        Int       @id @default(autoincrement())
+  wishlistId Int      
+  name      String
+  link      String
+  image     String
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  // Связь один ко многим между элементом и списком желаний
+  wishlist  Wishlist  @relation(fields: [wishlistId], references: [id])
+}
+
+enum Role {
+  PENDING
+  ACCEPTED
+  ADMIN
+}

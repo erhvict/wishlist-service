@@ -1,0 +1,74 @@
+services:
+  # название сервиса
+  postgres:
+    # образ
+    image: postgres
+    # политика перезапуска
+    restart: on-failure
+    # файл с переменными среды окружения
+    env_file:
+      - .env
+    # порты
+    ports:
+      - 5433:5432
+    # тома для постоянного хранения данных
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  # название сервиса
+  pgadmin:
+    # образ
+    image: dpage/pgadmin4
+    # политика перезапуска
+    restart: always
+    # файл с переменными среды окружения
+    env_file:
+      - .env
+    # порты
+    ports:
+      - '8888:80'
+    # тома для постоянного хранения данных
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: on-failure
+    env_file:
+      - .env
+    ports:
+      - 3001:3001
+    depends_on:
+      - postgres
+    volumes:
+      - ./backend/uploads:/usr/src/app/uploads
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    restart: on-failure
+    env_file:
+      - .env
+    ports:
+      - 3000:3000
+    depends_on:
+      - backend
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - 80:80
+    depends_on:
+      - frontend
+      - backend
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./backend/uploads:/usr/src/app/backend/uploads
+      - /etc/nginx/.htpasswd:/etc/nginx/.htpasswd
+
+volumes:
+  postgres-data:
+  pgadmin-data:
