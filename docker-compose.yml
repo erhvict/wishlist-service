@@ -33,7 +33,7 @@ services:
 
   backend:
     build:
-      context: ./backend
+      context: ./server
       dockerfile: Dockerfile
     restart: on-failure
     env_file:
@@ -43,11 +43,11 @@ services:
     depends_on:
       - postgres
     volumes:
-      - ./backend/uploads:/usr/src/app/uploads
+      - ./server/uploads:/usr/src/wish-server/uploads
 
   frontend:
     build:
-      context: ./frontend
+      context: ./client
       dockerfile: Dockerfile
     restart: on-failure
     env_file:
