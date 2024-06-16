@@ -1,4 +1,4 @@
-name: Deploy Backend
+name: Deploy Client
 
 on:
   push:
@@ -16,8 +16,8 @@ jobs:
       - name: Deploy to server
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
-            cd /path/to/your/project
-            git pull origin main
+            cd /usr/src/wish-client
+            git pull origin prod
             docker-compose down
             docker-compose up -d --build
           EOF
