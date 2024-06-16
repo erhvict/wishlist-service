@@ -25,7 +25,7 @@ jobs:
             PGADMIN_DEFAULT_PASSWORD=${{ secrets.PGADMIN_DEFAULT_PASSWORD }}
             DATABASE_URL=${{ secrets.DATABASE_URL }}
           script: |
-            cd /path/to/your/project
+            cd /usr/src/app-wish
             git pull origin prod
             docker-compose down
             docker-compose up -d --build

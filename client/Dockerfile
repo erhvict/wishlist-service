@@ -2,7 +2,7 @@
 FROM node:14
 
 # Устанавливаем рабочую директорию
-WORKDIR /usr/src/app
+WORKDIR /usr/src/app-wish
 
 # Копируем файлы package.json и package-lock.json
 COPY package*.json ./
