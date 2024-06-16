@@ -2,7 +2,7 @@
 FROM node:14
 
 # Устанавливаем рабочую директорию
-WORKDIR /usr/src/wish-server
+WORKDIR /usr/src/app
 
 # Копируем файлы package.json и package-lock.json
 COPY package*.json ./
@@ -16,8 +16,8 @@ COPY . .
 # Создаем папку для загрузок
 RUN mkdir -p ./uploads
 
-# Собираем приложение
-RUN npm run build
+# # Собираем приложение
+# RUN npm run build
 
 # Открываем порт
 EXPOSE 3001
